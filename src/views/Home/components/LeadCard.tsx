@@ -1,15 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Building2, Phone, Mail, MapPin, CheckCircle2, Clock, XCircle } from "lucide-react-native";
+import { Building2, Phone, Mail, MapPin, Clock } from "lucide-react-native";
 
 interface LeadProps {
   lead: any;
   onPress: () => void;
 }
 
-const LeadCard: React.FC<LeadProps> = ({ lead , onPress}) => {
+const LeadCard: React.FC<LeadProps> = ({ lead, onPress }) => {
   const getStatusColor = (status: string) => {
-    switch(status) {
+    switch (status) {
       case "Accepted": return "#2ecc71";
       case "Pending": return "#f5a623";
       case "Declined": return "#e74c3c";
@@ -18,9 +18,19 @@ const LeadCard: React.FC<LeadProps> = ({ lead , onPress}) => {
     }
   };
 
+  const getMatchColor = (score: number) => {
+    if (score >= 90) return "#1e7d3f";
+    if (score >= 80) return "#1c4e80";
+    return "#666";
+  };
+
   return (
-    <TouchableOpacity style={[styles.card, { borderLeftColor: getStatusColor(lead.status) }]}
-        onPress={onPress}
+    <TouchableOpacity
+      style={[
+        styles.card,
+        { borderLeftColor: getStatusColor(lead.status) }
+      ]}
+      onPress={onPress}
     >
       <View style={styles.header}>
         <Text style={styles.name}>{lead.name}</Text>
@@ -28,28 +38,43 @@ const LeadCard: React.FC<LeadProps> = ({ lead , onPress}) => {
           <Text style={styles.statusText}>{lead.status}</Text>
         </View>
       </View>
-      <View style={styles.row}>
-        <Building2 size={16} color="#555" />
-        <Text style={styles.info}>{lead.companyName}</Text>
+
+      <View style={styles.groupBox}>
+        <View style={styles.row}>
+          <Building2 size={16} color="#555" />
+          <Text style={styles.info}>{lead.companyName}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Phone size={16} color="#555" />
+          <Text style={styles.info}>{lead.mobile}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Mail size={16} color="#555" />
+          <Text style={styles.info}>{lead.email}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <MapPin size={16} color="#555" />
+          <Text style={styles.info}>
+            {lead.location.lat.toFixed(3)}, {lead.location.lng.toFixed(3)}
+          </Text>
+        </View>
+
+        <View style={styles.row}>
+          <Clock size={16} color="#555" />
+          <Text style={styles.info}>Last: {lead.lastContacted}</Text>
+        </View>
       </View>
-      <View style={styles.row}>
-        <Phone size={16} color="#555" />
-        <Text style={styles.info}>{lead.mobile}</Text>
-      </View>
-      <View style={styles.row}>
-        <Mail size={16} color="#555" />
-        <Text style={styles.info}>{lead.email}</Text>
-      </View>
-      <View style={styles.row}>
-        <MapPin size={16} color="#555" />
-        <Text style={styles.info}>{lead.location.lat.toFixed(3)}, {lead.location.lng.toFixed(3)}</Text>
-      </View>
-      <View style={styles.row}>
-        <Clock size={16} color="#555" />
-        <Text style={styles.info}>Last: {lead.lastContacted}</Text>
-      </View>
-      <View style={styles.matchRow}>
-        <Text style={styles.matchLabel}>Match Score:</Text>
+
+      <View
+        style={[
+          styles.matchBox,
+          { backgroundColor: getMatchColor(lead.matchScore) }
+        ]}
+      >
+        <Text style={styles.matchText}>Match Score</Text>
         <Text style={styles.matchValue}>{lead.matchScore}%</Text>
       </View>
     </TouchableOpacity>
@@ -76,7 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8
+    marginBottom: 10
   },
   name: {
     fontSize: 16,
@@ -85,7 +110,7 @@ const styles = StyleSheet.create({
   },
   statusBadge: {
     paddingHorizontal: 10,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 12
   },
   statusText: {
@@ -93,29 +118,39 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 12
   },
+  groupBox: {
+    backgroundColor: "#f7f7f7",
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 4,
+    marginBottom: 12
+  },
   row: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 4
+    marginBottom: 6
   },
   info: {
     marginLeft: 6,
     fontSize: 14,
     color: "#555"
   },
-  matchRow: {
+  matchBox: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 8
+    alignItems: "center"
   },
-  matchLabel: {
+  matchText: {
+    color: "#fff",
     fontSize: 14,
-    fontWeight: "600",
-    color: "#333"
+    fontWeight: "600"
   },
   matchValue: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#2ecc71"
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "800"
   }
 });

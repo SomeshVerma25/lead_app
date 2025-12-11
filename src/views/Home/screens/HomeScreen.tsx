@@ -14,11 +14,21 @@ const HomeScreen: React.FC = () => {
   const [search, setSearch] = useState("");
   const [list, setList] = useState<any[]>([]);
   const navigation: any = useNavigation()
+  const [sortToggle, setSortToggle] = useState(false);
 
   useEffect(() => {
     setList(leadsData);
     setUpLocation()
   }, []);
+
+  useEffect(() => {
+    if (sortToggle) {
+      const sortedList = [...leadsData].sort((a, b) => b.matchScore - a.matchScore);
+      setList(sortedList);
+    } else {
+      setList(leadsData);
+    }
+  }, [sortToggle]);
 
   const openAppSettings = () => {
     Linking.openSettings().catch(() => {
@@ -100,16 +110,16 @@ const HomeScreen: React.FC = () => {
       <SearchFilterSortBar
         value={search}
         onChangeText={setSearch}
-        onSortPress={() => console.log("Sort")}
-        onFilterPress={() => console.log("Filter")}
+        filterEnabled={sortToggle}
+        onFilterToggle={() => setSortToggle(!sortToggle)}
         onRightAction={() => console.log("Mic / Scan / Filter Right Btn")}
       />
     </>
   );
 
   const handleNotificationPress = () => {
-    EventEmitterService.emit('notification', 
-      {"id":1,"name":"Amit Sharma","mobile":"+91-981000001","email":"amit.sharma@example.com","companyName":"TechSolutions","location":{"lat":28.4595,"lng":77.0266},"matchScore":82,"status":"Assigned","source":"Website","lastContacted":"2025-12-10"},
+    EventEmitterService.emit('notification',
+      { "id": 1, "name": "Amit Sharma", "mobile": "+91-981000001", "email": "amit.sharma@example.com", "companyName": "TechSolutions", "location": { "lat": 28.4595, "lng": 77.0266 }, "matchScore": 82, "status": "Assigned", "source": "Website", "lastContacted": "2025-12-10" },
     )
   };
 
@@ -117,9 +127,7 @@ const HomeScreen: React.FC = () => {
     <View style={styles.container}>
       <StatusBar barStyle={'dark-content'} translucent backgroundColor="transparent" />
       <HomeHeader
-        onProfilePress={() => console.log("Profile")}
         onNotificationPress={handleNotificationPress}
-        onSettingsPress={() => console.log("Settings")}
       />
       <FlatList
         data={list}

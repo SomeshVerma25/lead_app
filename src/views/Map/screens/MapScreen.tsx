@@ -102,17 +102,17 @@ const MapScreen: React.FC = () => {
     );
   };
 
-  const moveToLead = (lead:any) => {
-  mapRef.current?.animateToRegion(
-    {
-      latitude: lead.location.lat,
-      longitude: lead.location.lng,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    },
-    600
-  );
-};
+  const moveToLead = (lead: any) => {
+    mapRef.current?.animateToRegion(
+      {
+        latitude: lead.location.lat,
+        longitude: lead.location.lng,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      },
+      600
+    );
+  };
 
   if (hasPermission === null) {
     return (
@@ -134,67 +134,67 @@ const MapScreen: React.FC = () => {
   }
 
   return (
-  <View style={styles.container}>
-    
-    {/* <MapViewClustering
-      ref={mapRef}
-      style={styles.map}
-      region={region}
-      provider={PROVIDER_GOOGLE}
-    >
-      {userLocation && (
-        <Circle
-          center={{
-            latitude: userLocation.lat,
-            longitude: userLocation.lng,
-          }}
-          radius={500}
-          strokeWidth={1}
-          strokeColor="rgba(0,122,255,0.5)"
-          fillColor="rgba(0,122,255,0.15)"
-        />
-      )}
+    <View style={styles.container}>
 
-      {userLocation && (
-        <Marker coordinate={{ latitude: userLocation.lat, longitude: userLocation.lng }}>
-          <Animated.View style={[styles.pulseWrapper, { transform: [{ scale: pulseAnim }] }]} />
-          <View style={styles.userMarker}>
-            <User size={22} color="#fff" />
-          </View>
-        </Marker>
-      )}
+      <MapViewClustering
+        ref={mapRef}
+        style={styles.map}
+        region={region}
+        provider={PROVIDER_GOOGLE}
+      >
+        {userLocation && (
+          <Circle
+            center={{
+              latitude: userLocation.lat,
+              longitude: userLocation.lng,
+            }}
+            radius={500}
+            strokeWidth={1}
+            strokeColor="rgba(0,122,255,0.5)"
+            fillColor="rgba(0,122,255,0.15)"
+          />
+        )}
 
-      {leadsData.map((lead) => (
-        <Marker
-          key={lead.id}
-          coordinate={{
-            latitude: lead.location.lat,
-            longitude: lead.location.lng,
-          }}
-          title={lead.name}
-          description={lead.companyName}
-        />
-      ))}
-    </MapViewClustering> */}
-    <NearbyLeadsOverlay
-      leads={leadsData}
-      onSelect={(lead) => moveToLead(lead)}
-      onFocus={(lead) => moveToLead(lead)}
-    />
-    <TouchableOpacity style={styles.fab} onPress={recenter}>
-      <Crosshair size={24} color="#fff" />
-    </TouchableOpacity>
-  </View>
-);
+        {userLocation && (
+          <Marker coordinate={{ latitude: userLocation.lat, longitude: userLocation.lng }}>
+            <Animated.View style={[styles.pulseWrapper, { transform: [{ scale: pulseAnim }] }]} />
+            <View style={styles.userMarker}>
+              <User size={22} color="#fff" />
+            </View>
+          </Marker>
+        )}
+
+        {leadsData.map((lead) => (
+          <Marker
+            key={lead.id}
+            coordinate={{
+              latitude: lead.location.lat,
+              longitude: lead.location.lng,
+            }}
+            title={lead.name}
+            description={lead.companyName}
+          />
+        ))}
+      </MapViewClustering>
+      <NearbyLeadsOverlay
+        leads={leadsData}
+        onSelect={(lead) => moveToLead(lead)}
+        onFocus={(lead) => moveToLead(lead)}
+      />
+      <TouchableOpacity style={styles.fab} onPress={recenter}>
+        <Crosshair size={24} color="#fff" />
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 export default MapScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  map: { 
+  map: {
     width: "100%",
-    height: "100%" 
+    height: "100%"
   },
   fab: {
     position: "absolute",
