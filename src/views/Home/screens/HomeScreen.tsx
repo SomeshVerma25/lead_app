@@ -1,4 +1,4 @@
-import { Alert, Linking, PermissionsAndroid, Platform, StyleSheet, View } from "react-native";
+import { Alert, Linking, PermissionsAndroid, Platform, StatusBar, StyleSheet, View } from "react-native";
 import HomeHeader from "../components/HomeHeader";
 import SearchFilterSortBar from "../components/SearchFilterSortBar";
 import DashboardAnalytics from "../components/DashboardAnalytics";
@@ -115,6 +115,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={'dark-content'} translucent backgroundColor="transparent" />
       <HomeHeader
         onProfilePress={() => console.log("Profile")}
         onNotificationPress={handleNotificationPress}

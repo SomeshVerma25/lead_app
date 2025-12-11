@@ -6,6 +6,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import {
   Send,
@@ -145,12 +146,12 @@ const ChatScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={'dark-content'} translucent backgroundColor="transparent" />
       <ChatHeader
         onNewChat={() => {
           setMessages([]);
         }}
       />
-
       {messages.length === 0 ? (
         <EmptyInitialState />
       ) : (
