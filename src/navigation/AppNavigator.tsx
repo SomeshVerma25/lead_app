@@ -7,6 +7,8 @@ import MapScreen from '../views/Map/screens/MapScreen';
 import CardScanScreen from '../views/Scan/screens/CardScanScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LeadDetailScreen from '../views/Leads/screens/LeadDetailsScreen';
+import { useEffect } from 'react';
+import LocationService from '../network/repo/map/LocationService';
 
 const Tabs = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -36,6 +38,11 @@ const UserHomeTabNavigator: React.FC = () => {
 };
 
 const AppNavigator: React.FC = () => {
+
+  useEffect(() => {
+    // LocationService.start()
+  },[])
+
   return (
     <NavigationContainer>
       <LoggedInUserNaviator />

@@ -14,6 +14,7 @@ import MapViewClustering from "react-native-map-clustering";
 import Geolocation from "react-native-geolocation-service";
 import { User, Crosshair } from "lucide-react-native";
 import { leadsData } from "../../../utils/leads";
+import NearbyLeadsOverlay from "../components/NearbyLeadsOverlay";
 
 const MapScreen: React.FC = () => {
   const mapRef = useRef<MapView>(null);
@@ -101,6 +102,18 @@ const MapScreen: React.FC = () => {
     );
   };
 
+  const moveToLead = (lead:any) => {
+  mapRef.current?.animateToRegion(
+    {
+      latitude: lead.location.lat,
+      longitude: lead.location.lng,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    },
+    600
+  );
+};
+
   if (hasPermission === null) {
     return (
       <View style={styles.centerBox}>
@@ -121,64 +134,58 @@ const MapScreen: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <MapViewClustering
-        ref={mapRef}
-        style={styles.map}
-        region={region}
-        provider={PROVIDER_GOOGLE}
-        clusterColor="#007bff"
-        clusterTextColor="#fff"
-        // clusterBorderWidth={1}
-        // clusterBorderColor="#fff"
-      >
-        {userLocation && (
-          <Circle
-            center={{
-              latitude: userLocation.lat,
-              longitude: userLocation.lng,
-            }}
-            radius={500}
-            strokeWidth={1}
-            strokeColor="rgba(0,122,255,0.5)"
-            fillColor="rgba(0,122,255,0.15)"
-          />
-        )}
-        {userLocation && (
-          <Marker
-            coordinate={{
-              latitude: userLocation.lat,
-              longitude: userLocation.lng,
-            }}
-          >
-            <Animated.View
-              style={[
-                styles.pulseWrapper,
-                { transform: [{ scale: pulseAnim }] }
-              ]}
-            />
-            <View style={styles.userMarker}>
-              <User size={22} color="#fff" />
-            </View>
-          </Marker>
-        )}
-        {leadsData.map((lead) => (
-          <Marker
-            key={lead.id}
-            coordinate={{
-              latitude: lead.location.lat,
-              longitude: lead.location.lng,
-            }}
-            title={lead.name}
-            description={lead.companyName}
-          />
-        ))}
-      </MapViewClustering>
-      <TouchableOpacity style={styles.fab} onPress={recenter}>
-        <Crosshair size={24} color="#fff" />
-      </TouchableOpacity>
-    </View>
-  );
+  <View style={styles.container}>
+    
+    {/* <MapViewClustering
+      ref={mapRef}
+      style={styles.map}
+      region={region}
+      provider={PROVIDER_GOOGLE}
+    >
+      {userLocation && (
+        <Circle
+          center={{
+            latitude: userLocation.lat,
+            longitude: userLocation.lng,
+          }}
+          radius={500}
+          strokeWidth={1}
+          strokeColor="rgba(0,122,255,0.5)"
+          fillColor="rgba(0,122,255,0.15)"
+        />
+      )}
+
+      {userLocation && (
+        <Marker coordinate={{ latitude: userLocation.lat, longitude: userLocation.lng }}>
+          <Animated.View style={[styles.pulseWrapper, { transform: [{ scale: pulseAnim }] }]} />
+          <View style={styles.userMarker}>
+            <User size={22} color="#fff" />
+          </View>
+        </Marker>
+      )}
+
+      {leadsData.map((lead) => (
+        <Marker
+          key={lead.id}
+          coordinate={{
+            latitude: lead.location.lat,
+            longitude: lead.location.lng,
+          }}
+          title={lead.name}
+          description={lead.companyName}
+        />
+      ))}
+    </MapViewClustering> */}
+    <NearbyLeadsOverlay
+      leads={leadsData}
+      onSelect={(lead) => moveToLead(lead)}
+      onFocus={(lead) => moveToLead(lead)}
+    />
+    <TouchableOpacity style={styles.fab} onPress={recenter}>
+      <Crosshair size={24} color="#fff" />
+    </TouchableOpacity>
+  </View>
+);
 };
 
 export default MapScreen;
